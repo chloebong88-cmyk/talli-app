@@ -1,0 +1,9 @@
+{
+  "name": "talli-app",
+  "version": "1.0.0",
+  "description": "AI-powered group project management for students",
+  "private": true,
+  "scripts": {
+    "start": "vercel dev"
+  }
+}
