@@ -534,19 +534,20 @@
         }
 
         /* Progress indicator (1/5 text) */
+        /* Progress indicator (1/5 text) - same size as logo */
         .progress-indicator {
             position: fixed;
             top: 2rem;
             right: 2rem;
             font-weight: 700;
             color: var(--text);
-            font-size: 1.3rem;
+            font-size: 1rem;
             z-index: 1000;
             background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 30px;
+            padding: 0.6rem 1rem;
+            border-radius: 20px;
             box-shadow: 0 4px 12px rgba(74, 107, 90, 0.2);
-            min-width: 75px;
+            min-width: 50px;
             text-align: center;
         }
 
@@ -1430,12 +1431,12 @@
 
     <!-- Progress Circle (shows page count) -->
     <div class="progress-circle-container" id="progressCircle" style="display: none;">
-        <svg width="73" height="73" viewBox="0 0 73 73">
-            <circle cx="36.5" cy="36.5" r="31" fill="none" stroke="#D4E0D9" stroke-width="5"/>
-            <circle id="progressCircleFill" cx="36.5" cy="36.5" r="31" fill="none" stroke="#4A6B5A" stroke-width="5" 
-                    stroke-dasharray="195" stroke-dashoffset="195" transform="rotate(-90 36.5 36.5)" 
+        <svg width="50" height="50" viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="21" fill="none" stroke="#D4E0D9" stroke-width="4"/>
+            <circle id="progressCircleFill" cx="25" cy="25" r="21" fill="none" stroke="#4A6B5A" stroke-width="4" 
+                    stroke-dasharray="132" stroke-dashoffset="132" transform="rotate(-90 25 25)" 
                     style="transition: stroke-dashoffset 0.5s ease;"/>
-            <text x="36.5" y="42" text-anchor="middle" font-size="18" font-weight="900" fill="var(--text)" id="progressText">0%</text>
+            <text x="25" y="29" text-anchor="middle" font-size="12" font-weight="900" fill="var(--text)" id="progressText">0%</text>
         </svg>
     </div>
 
@@ -2457,7 +2458,11 @@ Return ONLY JSON array:
                 const finalTasks = fillFinalWeekRestDays(tasksWithFinal, startDate, endDate, members);
                 console.log('✅ Final week rest days filled');
                 
-                return finalTasks;
+                // Limit to max 2 tasks per day
+                const limitedTasks = limitTasksPerDay(finalTasks, startDate, endDate);
+                console.log('✅ Tasks limited to max 2 per day');
+                
+                return limitedTasks;
 
             } catch (error) {
                 console.error('AI Error:', error);
@@ -2538,28 +2543,26 @@ Return ONLY JSON array:
         // Ensure rest days are ONLY on weekends (Sat/Sun), NEVER on weekdays
         // Final week = 0 rest days, all other weeks = 2 rest days (Sat & Sun only)
         function ensureWeeklyRestDays(tasks, startDate, endDate) {
-            console.log('🛌 Ensuring rest days: Sat/Sun only (not final week), weekdays MUST have tasks...');
+            console.log('🛌 Ensuring rest days: Sat/Sun only (not in last 7 days), weekdays MUST have tasks...');
             
-            // Find the Monday of the FINAL calendar week (the week containing endDate)
-            const endDay = endDate.getDay();
-            const daysFromMonday = endDay === 0 ? 6 : endDay - 1;
-            const finalWeekMonday = new Date(endDate);
-            finalWeekMonday.setDate(endDate.getDate() - daysFromMonday);
-            finalWeekMonday.setHours(0, 0, 0, 0);
+            // Last 7 days = no rest days allowed
+            const last7DaysStart = new Date(endDate);
+            last7DaysStart.setDate(endDate.getDate() - 6);
+            last7DaysStart.setHours(0, 0, 0, 0);
             
-            console.log(`   Final calendar week starts: ${finalWeekMonday.toLocaleDateString()} (Mon)`);
+            console.log(`   Last 7 days starts: ${last7DaysStart.toLocaleDateString()}`);
             
-            // First pass: Move weekend tasks to Friday (in non-final weeks)
+            // First pass: Move weekend tasks to Friday (NOT in last 7 days)
             let currentDate = new Date(startDate);
             currentDate.setHours(0, 0, 0, 0);
             
             while (currentDate <= endDate) {
                 const dayOfWeek = currentDate.getDay();
                 const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-                const isInFinalWeek = currentDate >= finalWeekMonday;
+                const isInLast7Days = currentDate >= last7DaysStart;
                 const dateStr = currentDate.toDateString();
                 
-                if (isWeekend && !isInFinalWeek) {
+                if (isWeekend && !isInLast7Days) {
                     const tasksOnDay = tasks.filter(t => new Date(t.dueDate).toDateString() === dateStr);
                     if (tasksOnDay.length > 0) {
                         console.log(`   🛌 ${dateStr} is weekend - moving tasks to Friday`);
@@ -2635,19 +2638,16 @@ Return ONLY JSON array:
             return tasks;
         }
         
-        // Fill ALL rest days in the FINAL CALENDAR WEEK - NO REST DAYS ALLOWED
-        // Final week = the calendar week (Mon-Sun) that contains the END DATE
+        // Fill ALL rest days in the LAST 7 DAYS - NO REST DAYS ALLOWED
         function fillFinalWeekRestDays(tasks, startDate, endDate, members) {
-            console.log('🏁 GUARANTEEING no rest days in final calendar week...');
+            console.log('🏁 GUARANTEEING no rest days in last 7 days...');
             
-            // Find the Monday of the week containing endDate
-            const endDay = endDate.getDay(); // 0 = Sunday, 1 = Monday, etc.
-            const daysFromMonday = endDay === 0 ? 6 : endDay - 1; // Sunday is end of week
+            // Last 7 days = endDate minus 6 days
+            const last7DaysStart = new Date(endDate);
+            last7DaysStart.setDate(endDate.getDate() - 6);
+            last7DaysStart.setHours(0, 0, 0, 0);
             
-            const finalWeekStart = new Date(endDate);
-            finalWeekStart.setDate(endDate.getDate() - daysFromMonday);
-            
-            console.log(`   Final calendar week: ${finalWeekStart.toLocaleDateString()} (Mon) to ${endDate.toLocaleDateString()}`);
+            console.log(`   Last 7 days: ${last7DaysStart.toLocaleDateString()} to ${endDate.toLocaleDateString()}`);
             
             // Get list of members
             const memberList = members || projectData.members || ['Team'];
@@ -2665,8 +2665,8 @@ Return ONLY JSON array:
             
             let taskNameIndex = 0;
             
-            // Check EVERY day from Monday of final week to end date
-            const currentDate = new Date(finalWeekStart);
+            // Check EVERY day in last 7 days
+            const currentDate = new Date(last7DaysStart);
             while (currentDate <= endDate) {
                 const dateStr = currentDate.toDateString();
                 
@@ -2702,7 +2702,75 @@ Return ONLY JSON array:
                 currentDate.setDate(currentDate.getDate() + 1);
             }
             
-            console.log('🏁 Final calendar week complete - all days have tasks');
+            console.log('🏁 Last 7 days complete - all days have tasks');
+            return tasks;
+        }
+        
+        // Limit max 2 tasks per day - redistribute excess to nearby days
+        function limitTasksPerDay(tasks, startDate, endDate) {
+            console.log('📊 Limiting to max 2 tasks per day...');
+            
+            const MAX_TASKS_PER_DAY = 2;
+            
+            // Group tasks by date
+            const tasksByDate = new Map();
+            tasks.forEach(task => {
+                const dateStr = new Date(task.dueDate).toDateString();
+                if (!tasksByDate.has(dateStr)) {
+                    tasksByDate.set(dateStr, []);
+                }
+                tasksByDate.get(dateStr).push(task);
+            });
+            
+            // Find days with too many tasks
+            for (const [dateStr, dayTasks] of tasksByDate) {
+                if (dayTasks.length > MAX_TASKS_PER_DAY) {
+                    console.log(`   ⚠️ ${dateStr} has ${dayTasks.length} tasks - redistributing...`);
+                    
+                    // Sort: keep meetings and "Everyone" tasks, move individual tasks
+                    const keepTasks = dayTasks.filter(t => 
+                        t.name.toLowerCase().includes('meeting') || 
+                        t.name.toLowerCase().includes('final submission') ||
+                        t.assignee === 'Everyone'
+                    );
+                    const movableTasks = dayTasks.filter(t => 
+                        !t.name.toLowerCase().includes('meeting') && 
+                        !t.name.toLowerCase().includes('final submission') &&
+                        t.assignee !== 'Everyone'
+                    );
+                    
+                    // Keep up to MAX, move the rest
+                    const tasksToKeep = [...keepTasks, ...movableTasks.slice(0, MAX_TASKS_PER_DAY - keepTasks.length)];
+                    const tasksToMove = movableTasks.slice(MAX_TASKS_PER_DAY - keepTasks.length);
+                    
+                    // Move excess tasks to adjacent days with fewer tasks
+                    const currentDate = new Date(dateStr);
+                    for (const task of tasksToMove) {
+                        // Try previous day first, then next day
+                        for (let offset of [-1, 1, -2, 2]) {
+                            const newDate = new Date(currentDate);
+                            newDate.setDate(newDate.getDate() + offset);
+                            
+                            // Check bounds
+                            if (newDate < startDate || newDate > endDate) continue;
+                            
+                            const newDateStr = newDate.toDateString();
+                            const newDayTasks = tasksByDate.get(newDateStr) || [];
+                            
+                            if (newDayTasks.length < MAX_TASKS_PER_DAY) {
+                                task.dueDate = newDate.toISOString();
+                                if (!tasksByDate.has(newDateStr)) {
+                                    tasksByDate.set(newDateStr, []);
+                                }
+                                tasksByDate.get(newDateStr).push(task);
+                                console.log(`      Moved "${task.name}" to ${newDateStr}`);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
             return tasks;
         }
         
@@ -4616,7 +4684,7 @@ Return ONLY JSON array:
             const text = document.getElementById('progressText');
             
             if (circle && text) {
-                const circumference = 195; // 2 * π * 31 (radius)
+                const circumference = 132; // 2 * π * 21 (radius)
                 const offset = circumference - (progress / 100) * circumference;
                 circle.style.strokeDashoffset = offset;
                 text.textContent = `${progress}%`;
