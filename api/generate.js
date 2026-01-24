@@ -1,6 +1,4 @@
-// Serverless function to proxy OpenRouter API calls
-// This keeps your API key secure on the server
-
+// Serverless function to proxy Anthropic API calls
 export default async function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -18,20 +16,26 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const { model, max_tokens, messages } = req.body;
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${process.env.OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://talli-app.com",
-        "X-Title": "Talli App"
+        "x-api-key": process.env.ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01"
       },
-      body: JSON.stringify(req.body)
+      body: JSON.stringify({
+        model,
+        max_tokens,
+        messages
+      })
     });
 
     const data = await response.json();
     
     if (!response.ok) {
+      console.error('Anthropic API Error:', data);
       return res.status(response.status).json(data);
     }
 
