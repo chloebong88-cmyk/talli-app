@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peer Assessment - Talli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4A6B5A;
+            --secondary: #2F4538;
+            --accent: #7FA08C;
+            --bg: #F5F7F6;
+            --text: #2F4538;
+            --text-light: #6B7F75;
+            --border: #D4E0D9;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #E8ECE9 0%, #F5F7F6 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.25rem;
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--primary);
+            background: var(--bg);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .member-card {
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .member-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .member-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .member-stats {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .rating-section {
+            margin-top: 1rem;
+        }
+
+        .rating-label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .star {
+            width: 32px;
+            height: 32px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+
+        .star:hover, .star.active {
+            background: #FFE5B3;
+            border-color: #FFB02E;
+        }
+
+        .comment-box {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .comment-box:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .tasks-list {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        .task-name {
+            color: var(--text);
+        }
+
+        .task-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .task-status.completed {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .task-status.pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .generate-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .no-project {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .no-project h2 {
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .no-project p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .color-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 12H5M12 19l-7-7 7-7"/>
+                </svg>
+                Back to Calendar
+            </a>
+            <h1>Peer Assessment</h1>
+            <div style="width: 140px;"></div>
+        </div>
+
+        <div id="content">
+            <!-- Content will be loaded by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Color map for members
+        const colorMap = ['#FFB3E6', '#FFE5B3', '#B3D9FF', '#D4B3FF', '#B3FFD9'];
+        
+        // Store ratings
+        const ratings = {};
+        const comments = {};
+
+        function loadProjectData() {
+            // Try to get project data from localStorage or Firebase reference
+            const currentProjectId = localStorage.getItem('currentProjectId');
+            
+            // Try multiple storage locations
+            let projectData = null;
+            
+            // Check for direct project storage
+            if (currentProjectId) {
+                const stored = localStorage.getItem(currentProjectId);
+                if (stored) {
+                    projectData = JSON.parse(stored);
+                }
+            }
+            
+            // Check for talliProjectData (backup)
+            if (!projectData) {
+                const backup = localStorage.getItem('talliProjectData');
+                if (backup) {
+                    projectData = JSON.parse(backup);
+                }
+            }
+
+            return projectData;
+        }
+
+        function renderContent() {
+            const content = document.getElementById('content');
+            const projectData = loadProjectData();
+
+            if (!projectData || !projectData.members || projectData.members.length === 0) {
+                content.innerHTML = `
+                    <div class="card no-project">
+                        <h2>No Project Found</h2>
+                        <p>Create a project first to generate peer assessments.</p>
+                        <a href="index.html" class="back-btn" style="display: inline-flex;">
+                            Go to Talli
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="card">
+                    <h2>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Team Contribution Overview
+                    </h2>
+                    <p style="color: var(--text-light); margin-bottom: 1rem;">Rate each team member's contribution and add comments for your assessment.</p>
+            `;
+
+            projectData.members.forEach((member, index) => {
+                const memberTasks = projectData.tasks ? projectData.tasks.filter(t => t.assignee === member) : [];
+                const completedTasks = memberTasks.filter(t => t.completed);
+                const completionRate = memberTasks.length > 0 ? Math.round((completedTasks.length / memberTasks.length) * 100) : 0;
+                const color = colorMap[index % colorMap.length];
+
+                ratings[member] = 0;
+                comments[member] = '';
+
+                html += `
+                    <div class="member-card" style="border-left: 4px solid ${color};">
+                        <div class="member-header">
+                            <div class="member-name">
+                                <span class="color-indicator" style="background: ${color};"></span>
+                                ${member}
+                            </div>
+                            <div class="member-stats">
+                                <div class="stat">
+                                    <div class="stat-value">${memberTasks.length}</div>
+                                    <div class="stat-label">Tasks</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">${completedTasks.length}</div>
+                                    <div class="stat-label">Done</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">${completionRate}%</div>
+                                    <div class="stat-label">Complete</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rating-section">
+                            <label class="rating-label">Contribution Rating</label>
+                            <div class="rating-stars" data-member="${member}">
+                                ${[1,2,3,4,5].map(n => `
+                                    <div class="star" data-rating="${n}" onclick="setRating('${member}', ${n})">
+                                        ${n <= 0 ? '☆' : '★'}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <textarea 
+                            class="comment-box" 
+                            placeholder="Add comments about ${member}'s contribution..."
+                            onchange="setComment('${member}', this.value)"
+                        ></textarea>
+
+                        ${memberTasks.length > 0 ? `
+                            <div class="tasks-list">
+                                <strong style="font-size: 0.85rem; color: var(--text-light);">Assigned Tasks:</strong>
+                                ${memberTasks.slice(0, 5).map(task => `
+                                    <div class="task-item">
+                                        <span class="task-name">${task.name}</span>
+                                        <span class="task-status ${task.completed ? 'completed' : 'pending'}">
+                                            ${task.completed ? 'Completed' : 'Pending'}
+                                        </span>
+                                    </div>
+                                `).join('')}
+                                ${memberTasks.length > 5 ? `<div style="font-size: 0.8rem; color: var(--text-light); padding-top: 0.5rem;">+${memberTasks.length - 5} more tasks</div>` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+
+            // Generate button
+            html += `
+                <button class="generate-btn" onclick="generateReport()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Download Peer Assessment Report
+                </button>
+            `;
+
+            content.innerHTML = html;
+        }
+
+        function setRating(member, rating) {
+            ratings[member] = rating;
+            
+            // Update UI
+            const stars = document.querySelectorAll(`[data-member="${member}"] .star`);
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                    star.innerHTML = '★';
+                } else {
+                    star.classList.remove('active');
+                    star.innerHTML = '☆';
+                }
+            });
+        }
+
+        function setComment(member, comment) {
+            comments[member] = comment;
+        }
+
+        function generateReport() {
+            const projectData = loadProjectData();
+            if (!projectData) {
+                alert('No project data found!');
+                return;
+            }
+
+            let report = `PEER ASSESSMENT REPORT\n`;
+            report += `${'='.repeat(60)}\n\n`;
+            report += `Project: ${projectData.name || 'Group Project'}\n`;
+            
+            if (projectData.startDate && projectData.endDate) {
+                const start = new Date(projectData.startDate).toLocaleDateString();
+                const end = new Date(projectData.endDate).toLocaleDateString();
+                report += `Period: ${start} - ${end}\n`;
+            }
+            
+            report += `Generated: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}\n\n`;
+            report += `${'='.repeat(60)}\n\n`;
+
+            report += `TEAM MEMBERS: ${projectData.members.join(', ')}\n\n`;
+            report += `${'='.repeat(60)}\n\n`;
+
+            report += `INDIVIDUAL ASSESSMENTS:\n\n`;
+
+            projectData.members.forEach(member => {
+                const memberTasks = projectData.tasks ? projectData.tasks.filter(t => t.assignee === member) : [];
+                const completedTasks = memberTasks.filter(t => t.completed);
+                const completionRate = memberTasks.length > 0 ? Math.round((completedTasks.length / memberTasks.length) * 100) : 0;
+
+                report += `${member.toUpperCase()}\n`;
+                report += `${'-'.repeat(40)}\n`;
+                report += `Tasks Assigned: ${memberTasks.length}\n`;
+                report += `Tasks Completed: ${completedTasks.length}\n`;
+                report += `Completion Rate: ${completionRate}%\n`;
+                report += `Rating: ${'★'.repeat(ratings[member] || 0)}${'☆'.repeat(5 - (ratings[member] || 0))} (${ratings[member] || 0}/5)\n`;
+                
+                if (comments[member]) {
+                    report += `Comments: ${comments[member]}\n`;
+                }
+
+                if (completedTasks.length > 0) {
+                    report += `\nCompleted Tasks:\n`;
+                    completedTasks.forEach(task => {
+                        report += `  - ${task.name}\n`;
+                    });
+                }
+
+                report += `\n`;
+            });
+
+            report += `${'='.repeat(60)}\n`;
+            report += `\nEND OF REPORT\n`;
+
+            // Download
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `peer_assessment_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            alert('Peer assessment report downloaded!');
+        }
+
+        // Initialize
+        renderContent();
+    </script>
+</body>
+</html>
