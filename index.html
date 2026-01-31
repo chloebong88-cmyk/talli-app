@@ -5263,6 +5263,7 @@ Return ONLY JSON array:
                 : 'Start a new project? This will reset everything.';
             
             if (confirm(message)) {
+                // Clear project data
                 projectData = {
                     members: [],
                     startDate: null,
@@ -5276,8 +5277,8 @@ Return ONLY JSON array:
                 // Clear the project ID so we don't reload the same project
                 localStorage.removeItem('currentProjectId');
                 
-                scrollToPage(1);
-                location.reload();
+                // Redirect to clean /home URL without any project parameters
+                window.location.href = window.location.origin + '/home';
             }
         };
         
