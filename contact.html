@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Talli - Get in touch with questions or feedback.">
+    <meta name="theme-color" content="#4A6B5A">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>Contact - Talli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4A6B5A;
+            --secondary: #2F4538;
+            --accent: #7FA08C;
+            --bg: #F5F7F6;
+            --text: #2F4538;
+            --text-light: #6B7F75;
+            --border: #D4E0D9;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #E8ECE9 0%, #F5F7F6 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(74, 107, 90, 0.2);
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        nav {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main container - centered */
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 5rem 2rem 3rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+            letter-spacing: 0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 500px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Feedback form */
+        .feedback-section {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+        }
+
+        .feedback-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(74, 107, 90, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.85rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--bg);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 107, 90, 0.1);
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 140px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--bg);
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 107, 90, 0.1);
+        }
+
+        .form-group textarea::placeholder,
+        .form-group input::placeholder {
+            color: var(--text-light);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.85rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(74, 107, 90, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 107, 90, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Success message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(74, 107, 90, 0.08);
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message svg {
+            width: 70px;
+            height: 70px;
+            stroke: var(--primary);
+            stroke-width: 1.5;
+            fill: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .success-message h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .success-message p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.75rem 2rem;
+            background: transparent;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+
+        .back-home:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 7rem 1.5rem 5rem;
+            }
+
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+
+            .subtitle {
+                font-size: 1.15rem;
+            }
+
+            nav {
+                top: auto;
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                justify-content: center;
+                background: white;
+                padding: 0.75rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .feedback-form {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="logo-container">
+        <img src="logo.png" alt="Talli" class="logo">
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact" class="active">Contact</a>
+    </nav>
+
+    <div class="main-container">
+        <div class="hero">
+            <h1>Get in touch.</h1>
+            <p class="subtitle">Questions, feedback, or ideas? We'd love to hear from you.</p>
+        </div>
+
+        <div class="feedback-section">
+            <!-- 
+                SETUP INSTRUCTIONS:
+                1. Go to https://formspree.io and sign up (free)
+                2. Create a new form
+                3. Replace "YOUR_FORM_ID" below with your actual form ID
+                4. Responses will be emailed to you!
+            -->
+            <form class="feedback-form" id="feedbackForm" action="https://formspree.io/f/xpqrenan" method="POST">
+                <div class="form-group">
+                    <label for="email">Your email</label>
+                    <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Your message</label>
+                    <textarea id="message" name="message" placeholder="What's on your mind? Feature requests, bug reports, or just say hi..." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send message →</button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9 12l2 2 4-4"></path>
+                </svg>
+                <h3>Message sent!</h3>
+                <p>Thanks for reaching out. We'll get back to you soon.</p>
+                <a href="/" class="back-home">← Back to Talli</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handle form submission with Formspree
+        const form = document.getElementById('feedbackForm');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    form.style.display = 'none';
+                    document.getElementById('successMessage').classList.add('show');
+                } else {
+                    alert('Oops! Something went wrong. Please try again.');
+                }
+            } catch (error) {
+                alert('Oops! Something went wrong. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
