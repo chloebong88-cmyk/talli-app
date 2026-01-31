@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="About Talli - AI-powered group project management for students.">
+    <meta name="theme-color" content="#4A6B5A">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>About - Talli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4A6B5A;
+            --secondary: #2F4538;
+            --accent: #7FA08C;
+            --bg: #F5F7F6;
+            --text: #2F4538;
+            --text-light: #6B7F75;
+            --border: #D4E0D9;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #E8ECE9 0%, #F5F7F6 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .logo-container {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(74, 107, 90, 0.2);
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        nav {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1.5rem;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        nav a:hover, nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+        }
+
+        /* Hero section */
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+            font-size: 4.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out forwards;
+            letter-spacing: 0.02em;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .subtitle .smarter,
+        .subtitle .harder {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Content sections */
+        .content {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* How it works - circular icons */
+        .steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 140px;
+        }
+
+        .step-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 107, 90, 0.08);
+        }
+
+        .step:hover .step-circle {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(74, 107, 90, 0.15);
+        }
+
+        .step-circle svg {
+            width: 32px;
+            height: 32px;
+            stroke: var(--primary);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .step-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+        }
+
+        /* Story section */
+        .story {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(74, 107, 90, 0.08);
+            text-align: center;
+        }
+
+        .story p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            margin-top: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.3s forwards;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: 50px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(74, 107, 90, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 107, 90, 0.4);
+        }
+
+        .steps-container {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 7rem 1.5rem 3rem;
+            }
+
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+
+            .subtitle {
+                font-size: 1.15rem;
+            }
+
+            nav {
+                top: auto;
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                justify-content: center;
+                background: white;
+                padding: 0.75rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .logo {
+                width: 50px;
+                height: 50px;
+            }
+
+            .steps {
+                gap: 1.5rem;
+            }
+
+            .step {
+                width: 120px;
+            }
+
+            .step-circle {
+                width: 70px;
+                height: 70px;
+            }
+
+            .step-circle svg {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="logo-container">
+        <img src="logo.png" alt="Talli" class="logo">
+    </a>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about" class="active">About</a>
+        <a href="/contact">Contact</a>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>Talli.</h1>
+            <p class="subtitle">Group project management for students who want to collaborate <span class="smarter">smarter</span>, not <span class="harder">harder</span>.</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>How it works</h2>
+                <div class="steps-container">
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-circle">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
+                            <span class="step-label">Upload your brief</span>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-circle">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <span class="step-label">Add your team</span>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-circle">
+                                <svg viewBox="0 0 24 24">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                </svg>
+                            </div>
+                            <span class="step-label">AI plans it</span>
+                        </div>
+
+                        <div class="step">
+                            <div class="step-circle">
+                                <svg viewBox="0 0 24 24">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    <path d="M8 14h.01"></path>
+                                    <path d="M12 14h.01"></path>
+                                    <path d="M16 14h.01"></path>
+                                    <path d="M8 18h.01"></path>
+                                    <path d="M12 18h.01"></path>
+                                </svg>
+                            </div>
+                            <span class="step-label">Track together</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="story">
+                    <p>Built by a student who got tired of the chaos. No more endless WhatsApp threads. No more "who's doing what?" Talli handles the logistics so you can focus on the work.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta">
+            <a href="/" class="cta-btn">Start a project →</a>
+        </div>
+    </div>
+</body>
+</html>
