@@ -1,8 +1,0 @@
-{
-  "version": 2,
-  "rewrites": [
-    { "source": "/about", "destination": "/about.html" },
-    { "source": "/home", "destination": "/home.html" },
-    { "source": "/contact", "destination": "/contact.html" }
-  ]
-}
