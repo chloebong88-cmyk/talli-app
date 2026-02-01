@@ -1985,19 +1985,19 @@
             font-style: italic;
         }
 
-        /* Floating Document Preview */
+        /* Floating Document Preview - Left side */
         .doc-preview {
             position: fixed;
-            top: 100px;
-            right: 20px;
-            width: 200px;
+            top: 120px;
+            left: 20px;
+            width: 180px;
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             z-index: 100;
             transition: all 0.3s ease;
             overflow: hidden;
-            max-height: 300px;
+            max-height: 350px;
             display: none;
         }
 
@@ -2006,39 +2006,34 @@
         }
 
         .doc-preview:hover {
-            width: 320px;
-            max-height: 500px;
+            width: 260px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
         .doc-preview-header {
-            padding: 0.75rem 1rem;
+            padding: 0.6rem 0.85rem;
             background: var(--primary);
             color: white;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.4rem;
         }
 
         .doc-preview-content {
-            padding: 0.5rem;
+            padding: 0.4rem;
             overflow-y: auto;
-            max-height: 240px;
-        }
-
-        .doc-preview:hover .doc-preview-content {
-            max-height: 440px;
+            max-height: 290px;
         }
 
         .doc-preview-item {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 8px;
-            margin-bottom: 0.25rem;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            margin-bottom: 0.2rem;
             transition: background 0.2s;
         }
 
@@ -2047,14 +2042,14 @@
         }
 
         .doc-preview-dot {
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
         .doc-preview-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: var(--text);
             white-space: nowrap;
@@ -2064,7 +2059,7 @@
         }
 
         .doc-preview-assignee {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             color: var(--text-light);
             white-space: nowrap;
             display: none;
@@ -2074,28 +2069,22 @@
             display: block;
         }
 
-        .doc-preview-hint {
-            font-size: 0.7rem;
-            color: var(--text-light);
-            text-align: center;
-            padding: 0.5rem;
-            border-top: 1px solid var(--border);
-        }
+        @media (max-width: 1200px) {
+            .doc-preview {
+                top: auto;
+                bottom: 100px;
+                left: 10px;
+                width: 160px;
+            }
 
-        .doc-preview:hover .doc-preview-hint {
-            display: none;
+            .doc-preview:hover {
+                width: 240px;
+            }
         }
 
         @media (max-width: 768px) {
             .doc-preview {
-                top: auto;
-                bottom: 80px;
-                right: 10px;
-                width: 180px;
-            }
-
-            .doc-preview:hover {
-                width: 280px;
+                display: none !important;
             }
         }
 
@@ -2821,15 +2810,6 @@
             </svg>
             Share
         </button>
-        <button class="calendar-action-btn" id="templateViewBtn" onclick="openTemplateView()" title="View Document" style="display: none;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-            </svg>
-            Document
-        </button>
         <button class="calendar-action-btn peer-assessment-btn" onclick="window.location.href='peer-assessment.html'" title="Peer Assessment">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -2858,7 +2838,7 @@
     <!-- Floating Document Preview -->
     <div class="doc-preview" id="docPreview">
         <div class="doc-preview-header">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                 <polyline points="14 2 14 8 20 8"></polyline>
             </svg>
@@ -2867,7 +2847,6 @@
         <div class="doc-preview-content" id="docPreviewContent">
             <!-- Sections will be rendered here -->
         </div>
-        <div class="doc-preview-hint">Hover to expand</div>
     </div>
 
         </div>
@@ -5498,10 +5477,7 @@ Please assign tasks fairly based on each team member's strengths and availabilit
             // Show progress circle
             toggleProgressCircle();
             
-            // Update template view button and preview
-            if (typeof updateTemplateViewButton === 'function') {
-                updateTemplateViewButton();
-            }
+            // Show document preview if template selected
             if (typeof renderDocPreview === 'function') {
                 renderDocPreview();
             }
@@ -6288,27 +6264,6 @@ Please assign tasks fairly based on each team member's strengths and availabilit
             `).join('');
             
             preview.classList.add('visible');
-        };
-        
-        // Update template view button visibility and show preview
-        window.updateTemplateViewButton = function() {
-            const btn = document.getElementById('templateViewBtn');
-            if (!btn) return;
-            
-            if (selectedTemplate) {
-                btn.style.display = 'flex';
-                if (selectedTemplate === 'presentation') {
-                    btn.innerHTML = `
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                        Slides`;
-                }
-            } else {
-                btn.style.display = 'none';
-            }
         };
         
         // Generate document sections based on template and tasks
