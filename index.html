@@ -1985,19 +1985,19 @@
             font-style: italic;
         }
 
-        /* Floating Document Preview - Left side */
+        /* Floating Document Preview - Left side below calendar header */
         .doc-preview {
             position: fixed;
-            top: 120px;
+            top: 280px;
             left: 20px;
-            width: 180px;
+            width: 170px;
             background: white;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             z-index: 100;
             transition: all 0.3s ease;
             overflow: hidden;
-            max-height: 350px;
+            max-height: 320px;
             display: none;
         }
 
@@ -2006,16 +2006,16 @@
         }
 
         .doc-preview:hover {
-            width: 260px;
+            width: 240px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
         .doc-preview-header {
-            padding: 0.6rem 0.85rem;
+            padding: 0.5rem 0.75rem;
             background: var(--primary);
             color: white;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.4rem;
@@ -3502,13 +3502,19 @@
             const prompt = `Generate ${idealTaskCount}-${idealTaskCount + 3} project tasks based on the BRIEF REQUIREMENTS.
 
 PROJECT: ${durationDays} days (${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()})
-TEAM: ${members.join(', ')}
+TEAM: ${members.join(', ')} (${members.length} people)
 ${teamDetailsStr}
 
 ASSIGNMENT BRIEF (READ CAREFULLY - BASE ALL TASKS ON THIS):
 ${brief}
 
 TASK COUNT: Keep it simple - generate ${idealTaskCount} meaningful tasks. Quality over quantity. Each task should be substantial, not micro-tasks.
+
+⚠️ CRITICAL - EQUAL TASK DISTRIBUTION:
+- Each team member MUST have roughly the SAME number of individual tasks (within 1 task of each other)
+- With ${members.length} people and ~${idealTaskCount} tasks, each person should get ${Math.floor(idealTaskCount / members.length)}-${Math.ceil(idealTaskCount / members.length)} tasks
+- DO NOT give some people 8 tasks while others get 4 - this is unfair
+- Count tasks per person as you generate and balance them
 
 ⚠️ CRITICAL TASK TIMING - MUST FOLLOW:
 - FIRST THIRD (Days 1-${Math.floor(durationDays/3)}): Research, planning, gathering materials, initial outlines
@@ -3523,15 +3529,7 @@ TASK NAMING:
 - Be specific but simple: "Write Introduction Section", "Create Data Chart", "Draft Methodology"
 - Final week tasks should be: "Review and Polish Content", "Final Quality Check", "Proofread All Sections", "Format Final Document"
 
-TASK DEPENDENCIES:
-- Use "dependsOn" to specify which task(s) must be completed BEFORE this task can start
-- Use the exact task name from another task in the array
-- Examples: "Write Draft" dependsOn "Research Topic", "Final Review" dependsOn "Complete Draft"
-- Leave dependsOn as null if the task has no dependencies
-- Meetings and first-day tasks should have no dependencies (null)
-- Be logical: you can't review what hasn't been written, you can't edit before drafting
-
-MEETINGS (EXACTLY 3 - NO other tasks on meeting days):
+MEETINGS (EXACTLY 3 - assigned to "Everyone"):
 1. "Project Kickoff Meeting" (Everyone) - Day 1 or 2
 2. "Mid-Project Review Meeting" (Everyone) - EXACTLY at day ${Math.round(durationDays / 2)} (the true midpoint)
 3. "Final Content Review Meeting" (Everyone) - Day ${durationDays - 1} (day before submission)
@@ -3540,17 +3538,12 @@ REST DAYS:
 - Weekends (Saturdays/Sundays) can be rest days EXCEPT in final 7 days
 - Final 7 days = NO rest days, all work days
 
-DISTRIBUTION BY PHASE:
-- Early (Days 1-${Math.floor(durationDays/3)}): Research, planning, gather references, initial drafts
-- Middle (Days ${Math.floor(durationDays/3)+1}-${Math.floor(durationDays*2/3)}): Main content creation, writing, building deliverables
-- Late (Days ${Math.floor(durationDays*2/3)+1}-${durationDays}): REVIEW AND POLISH ONLY - no new content
-
 FINAL 2 DAYS:
 - Second-to-last day: "Final Content Review Meeting" (Everyone) - ONLY THIS TASK
 - Last day: "Final Submission" (Everyone) - ONLY THIS TASK
 
 Return ONLY JSON array:
-[{"name": "Simple Task Name", "assignee": "Name", "durationDays": 1, "description": "Brief description", "dependsOn": "Name of prerequisite task" or null}]`;
+[{"name": "Task Name", "assignee": "Name", "durationDays": 1, "description": "Brief description"}]`;
 
 
 
@@ -5441,7 +5434,11 @@ Please assign tasks fairly based on each team member's strengths and availabilit
                                 const blockedStyle = isBlocked ? 'opacity: 0.6; border: 2px dashed #D4E0D9;' : '';
                                 const lockIcon = isBlocked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; flex-shrink: 0;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>' : '';
                                 
-                                return `<div class="task-indicator task-item" data-task-id="${task.id}" draggable="${!isRest}" style="background: rgba(255,255,255,0.9); color: ${textColor}; font-weight: ${fontWeight}; ${completedStyle} ${blockedStyle} display: flex; align-items: center;">${lockIcon}${task.name}</div>`;
+                                // Green background for Everyone tasks, white for individual
+                                const isEveryoneTask = task.assignee === 'Everyone';
+                                const taskBg = isEveryoneTask ? 'background: #9FBDAE; color: #2F4538;' : 'background: rgba(255,255,255,0.9);';
+                                
+                                return `<div class="task-indicator task-item" data-task-id="${task.id}" draggable="${!isRest}" style="${taskBg} color: ${textColor}; font-weight: ${fontWeight}; ${completedStyle} ${blockedStyle} display: flex; align-items: center;">${lockIcon}${task.name}</div>`;
                             }).join('')}
                         ${tasksOnDay.length > 3 ? `<div class="task-indicator" style="background: rgba(255,255,255,0.9);">+${tasksOnDay.length - 3} more</div>` : ''}
                         </div>
